@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:pomato/statscreen.dart';
 import 'package:pomato/taskscreen.dart';
 import 'package:pomato/timerscreen.dart';
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'settings.dart';
 
 void main() {
@@ -34,7 +34,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+ State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -67,7 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          const SizedBox(width: 8.0),
           Expanded(
             child: IndexedStack(
               index: _selectedIndex,

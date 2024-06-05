@@ -1,5 +1,5 @@
 name: pomato
-description: "A new Flutter project."
+description: "A free and open source Pomodoro timer app for Android, made using Flutter."
 publish_to: 'none'
 version: 0.1.0
 
@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   google_nav_bar: ^5.0.6
+  shared_preferences: ^2.2.3
+  flutter_settings_ui: ^3.0.0
 
 dev_dependencies:
   flutter_test:
