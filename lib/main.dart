@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'settings.dart'; // Ensure this import is correct and the path is accurate.
+import 'package:pomato/statscreen.dart';
+import 'package:pomato/taskscreen.dart';
+import 'package:pomato/timerscreen.dart';
+import 'settings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
@@ -37,19 +40,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Timer',
-      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-    ),
-    Text(
-      'Tasks',
-      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-    ),
-    Text(
-      'Stats',
-      style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-    ),
+  final List<Widget> _widgetOptions = <Widget>[
+    const TimerScreen(),
+    const TaskScreen(),
+    const StatScreen(),
   ];
 
   @override
@@ -65,7 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SettingsPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const SettingsPage()),
                   );
                 },
                 icon: const Icon(Icons.settings_rounded),
@@ -73,7 +68,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           const SizedBox(width: 8.0),
-          _widgetOptions.elementAt(_selectedIndex),
+          Expanded(
+            child: IndexedStack(
+              index: _selectedIndex,
+              children: _widgetOptions,
+            ),
+          ),
         ]),
       ),
       bottomNavigationBar: Container(
@@ -122,4 +122,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
- 
