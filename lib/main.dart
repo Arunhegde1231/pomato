@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'settings.dart'; // Ensure this import is correct and the path is accurate.
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +28,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -45,17 +55,37 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(0.2))
-          ]),
-          child: SafeArea(
-              child: Padding(
+      body: SafeArea(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsPage()),
+                  );
+                },
+                icon: const Icon(Icons.settings_rounded),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          _widgetOptions.elementAt(_selectedIndex),
+        ]),
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(0.2))
+        ]),
+        child: SafeArea(
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
             child: GNav(
+              tabActiveBorder:
+                  Border.all(style: BorderStyle.solid, color: Colors.black),
               rippleColor: Colors.grey[300]!,
               hoverColor: Colors.grey[200]!,
               gap: 7,
@@ -76,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 GButton(
                   icon: Icons.bar_chart_rounded,
-                  text: 'Tasks',
+                  text: 'Stats',
                 )
               ],
               selectedIndex: _selectedIndex,
@@ -86,7 +116,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
             ),
-          )),
-        ));
+          ),
+        ),
+      ),
+    );
   }
 }
+ 
