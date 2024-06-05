@@ -22,7 +22,7 @@
 
 - Make sure Flutter is installed on your PC if not then, go to this site and follow the instructions to install it on your PC.<br>
 
-  > https://docs.flutter.dev/get-started/install
+> https://docs.flutter.dev/get-started/install
 
 - Clone the repository<br>
 
