@@ -26,20 +26,20 @@
 
 - Clone the repository<br>
 
-  > git clone https://github.com/Arunhegde1231/pomato.git
+    > git clone https://github.com/Arunhegde1231/pomato.git
 
 - Open the directory<br>
 
-  > cd pomato
+    > cd pomato
 
 - Download dependencies<br>
 
-  > flutter pub get
+    > flutter pub get
 
 - Build APK<br>
 
-  > flutter build apk
+    > flutter build apk
 
 - You can also build split APK<br>
 
-  > flutter build apk --split-per-abi
+    > flutter build apk --split-per-abi
