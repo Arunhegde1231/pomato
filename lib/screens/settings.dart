@@ -131,6 +131,27 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ],
             ),
+            SettingsSection(
+              title: const Text('Tasks'),
+              tiles: [
+                SettingsTile(
+                  title: const Text('Minutes'),
+                  description: Text('Set timer in minutes ($_timerValue min)'),
+                  onPressed: (BuildContext context) {
+                    
+                  },
+                ),
+                SettingsTile(
+                  title: const Text('Break'),
+                  description:
+                      Text('Set break time in minutes ($_breakValue min)'),
+                  onPressed: (BuildContext context) {
+                    _showSliderDialog(
+                        context, 'Set Break Minutes', 'breakValue');
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
