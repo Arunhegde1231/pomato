@@ -1,9 +1,9 @@
-import 'package:pomato/statscreen.dart';
-import 'package:pomato/taskscreen.dart';
-import 'package:pomato/timerscreen.dart';
+import 'package:pomato/screens/statscreen.dart';
+import 'package:pomato/screens/taskscreen.dart';
+import 'package:pomato/screens/timerscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'settings.dart';
+import 'screens/settings.dart';
 
 void main() {
   runApp(const MyApp());
