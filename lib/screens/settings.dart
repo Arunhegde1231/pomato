@@ -6,6 +6,9 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pomato/notifiers.dart';
 
+
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -38,7 +41,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void _showSliderDialog(BuildContext context, String title, String key) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return GlassEffect(
           blur: 3,
           opacity: 0.3,
@@ -123,6 +126,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: SettingsList(
           sections: [
