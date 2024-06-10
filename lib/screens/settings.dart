@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:pomato/effects.dart';
+import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pomato/notifiers.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -16,6 +18,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   int _timerValue = 25; // default
   int _breakValue = 5; // default
+  bool _settingsChanged = false;
 
   @override
   void initState() {
@@ -25,7 +28,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
+    setState(() async {
+      await prefs.reload();
       _timerValue = prefs.getInt('timerValue') ?? 25;
       _breakValue = prefs.getInt('breakValue') ?? 5;
     });
@@ -60,9 +64,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 final prefs = await SharedPreferences.getInstance();
                 if (key == 'timerValue') {
                   prefs.setInt('timerValue', value.round());
+                  await prefs.reload();
+                  Provider.of<TimerNotifier>(context, listen: false)
+                      .updateTimer(value.round());
                 } else {
                   prefs.setInt('breakValue', value.round());
+                  await prefs.reload();
+                  Provider.of<BreakNotifier>(context, listen: false)
+                      .updateBreak(value.round());
                 }
+                setState(() {
+                  _settingsChanged = true;
+                });
               },
               appearance: CircularSliderAppearance(
                 customWidths: CustomSliderWidths(
@@ -89,6 +102,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  setState(() {
+                    _settingsChanged = true;
+                  });
                 },
               ),
             ],
@@ -96,6 +112,12 @@ class _SettingsPageState extends State<SettingsPage> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    Navigator.of(context).pop(_settingsChanged);
+    super.dispose();
   }
 
   @override
@@ -124,31 +146,20 @@ class _SettingsPageState extends State<SettingsPage> {
                         context, 'Set Break Minutes', 'breakValue');
                   },
                 ),
-                SettingsTile(
-                  title: const Text('Number of Timers'),
-                  description: const Text('Set maximum number of timers'),
-                  onPressed: (BuildContext context) {},
-                ),
               ],
             ),
             SettingsSection(
               title: const Text('Tasks'),
               tiles: [
                 SettingsTile(
-                  title: const Text('Minutes'),
-                  description: Text('Set timer in minutes ($_timerValue min)'),
-                  onPressed: (BuildContext context) {
-                    
-                  },
+                  title: const Text('xoxoxox'),
+                  description: const Text('xoxoxoxox'),
+                  onPressed: (BuildContext context) {},
                 ),
                 SettingsTile(
-                  title: const Text('Break'),
-                  description:
-                      Text('Set break time in minutes ($_breakValue min)'),
-                  onPressed: (BuildContext context) {
-                    _showSliderDialog(
-                        context, 'Set Break Minutes', 'breakValue');
-                  },
+                  title: const Text('xoxoxox'),
+                  description: const Text('xoxoxoxox'),
+                  onPressed: (BuildContext context) {},
                 ),
               ],
             ),

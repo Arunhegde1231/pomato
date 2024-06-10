@@ -1,12 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'notifiers.dart';
 import 'package:pomato/screens/statscreen.dart';
 import 'package:pomato/screens/taskscreen.dart';
 import 'package:pomato/screens/timerscreen.dart';
-import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'screens/settings.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TimerNotifier(25)),
+        ChangeNotifierProvider(create: (_) => BreakNotifier(5)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -34,7 +44,7 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
- State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {

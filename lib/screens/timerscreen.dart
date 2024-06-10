@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import '../notifiers.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
@@ -12,13 +14,11 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  int timer = 25;
-  int breakTime = 10; 
-  bool isBreakTime = false;
   int remainingTime = 0;
   Timer? _timer;
-  bool isPaused = false;
+  bool isPaused = true;
   bool isRunning = false;
+  bool isBreakTime = false;
 
   @override
   void initState() {
@@ -28,10 +28,26 @@ class _TimerScreenState extends State<TimerScreen> {
 
   Future<void> _loadTimerData() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
     setState(() {
-      timer = prefs.getInt('timerValue') ?? 25;
-      breakTime = prefs.getInt('breakValue') ?? 10;
-      remainingTime = timer * 60;
+      remainingTime = (prefs.getInt('timerValue') ?? 25) * 60;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final TimerNotifier timerNotifier = Provider.of<TimerNotifier>(context);
+    final BreakNotifier breakNotifier = Provider.of<BreakNotifier>(context);
+    timerNotifier.addListener(_updateRemainingTime);
+    breakNotifier.addListener(_updateRemainingTime);
+  }
+
+  void _updateRemainingTime() {
+    setState(() {
+      remainingTime = isBreakTime
+          ? Provider.of<BreakNotifier>(context, listen: false).value * 60
+          : Provider.of<TimerNotifier>(context, listen: false).value * 60;
     });
   }
 
@@ -66,17 +82,21 @@ class _TimerScreenState extends State<TimerScreen> {
     setState(() {
       isRunning = false;
       isPaused = false;
-      remainingTime = isBreakTime ? breakTime * 60 : timer * 60;
+      remainingTime = isBreakTime
+          ? Provider.of<BreakNotifier>(context, listen: false).value * 60
+          : Provider.of<TimerNotifier>(context, listen: false).value * 60;
     });
   }
 
   void _switchMode() {
     setState(() {
       if (isBreakTime) {
-        remainingTime = timer * 60;
+        remainingTime =
+            Provider.of<TimerNotifier>(context, listen: false).value * 60;
         isBreakTime = false;
       } else {
-        remainingTime = breakTime * 60;
+        remainingTime =
+            Provider.of<BreakNotifier>(context, listen: false).value * 60;
         isBreakTime = true;
       }
     });
