@@ -15,6 +15,8 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   provider: ^6.1.2
   flutter_form_builder: ^9.3.0
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:
