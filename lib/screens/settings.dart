@@ -6,7 +6,6 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pomato/notifiers.dart';
 
-
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
 class SettingsPage extends StatefulWidget {
@@ -68,12 +67,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 if (key == 'timerValue') {
                   prefs.setInt('timerValue', value.round());
                   await prefs.reload();
-                  Provider.of<TimerNotifier>(context, listen: false)
+                  Provider.of<TimerNotifier>(context.mounted as BuildContext, listen: false)
                       .updateTimer(value.round());
                 } else {
                   prefs.setInt('breakValue', value.round());
                   await prefs.reload();
-                  Provider.of<BreakNotifier>(context, listen: false)
+                  Provider.of<BreakNotifier>(context.mounted as BuildContext, listen: false)
                       .updateBreak(value.round());
                 }
                 setState(() {
@@ -135,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
               tiles: [
                 SettingsTile(
                   title: const Text('Minutes'),
-                  description: Text('Set timer in minutes ($_timerValue min)'),
+                  description: const Text('Set timer in minutes'),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
                         context, 'Set Timer Minutes', 'timerValue');
@@ -143,8 +142,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SettingsTile(
                   title: const Text('Break'),
-                  description:
-                      Text('Set break time in minutes ($_breakValue min)'),
+                  description: const Text('Set break time in minutes '),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
                         context, 'Set Break Minutes', 'breakValue');
@@ -154,6 +152,21 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             SettingsSection(
               title: const Text('Tasks'),
+              tiles: [
+                SettingsTile(
+                  title: const Text('xoxoxox'),
+                  description: const Text('xoxoxoxox'),
+                  onPressed: (BuildContext context) {},
+                ),
+                SettingsTile(
+                  title: const Text('xoxoxox'),
+                  description: const Text('xoxoxoxox'),
+                  onPressed: (BuildContext context) {},
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: const Text('Statistics'),
               tiles: [
                 SettingsTile(
                   title: const Text('xoxoxox'),
