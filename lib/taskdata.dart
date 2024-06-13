@@ -30,11 +30,29 @@ class DataBaseGroup {
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE tasks (
+      CREATE TABLE task_groups (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL
+        name TEXT
       )
     ''');
+    await db.execute('''
+      CREATE TABLE tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        group_id INTEGER,
+        FOREIGN KEY(group_id) REFERENCES task_groups(id)
+      )
+    ''');
+  }
+
+  Future<int> insertTaskGroup(Map<String, dynamic> group) async {
+    final db = await database;
+    return await db.insert('task_groups', group);
+  }
+
+  Future<List<Map<String, dynamic>>> getTaskGroups() async {
+    final db = await database;
+    return await db.query('task_groups');
   }
 
   Future<int> insertTask(Map<String, dynamic> task) async {
@@ -42,8 +60,8 @@ class DataBaseGroup {
     return await db.insert('tasks', task);
   }
 
-  Future<List<Map<String, dynamic>>> getTasks() async {
+  Future<List<Map<String, dynamic>>> getTasks(int groupId) async {
     final db = await database;
-    return await db.query('tasks');
+    return await db.query('tasks', where: 'group_id = ?', whereArgs: [groupId]);
   }
 }

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:pomato/taskdata.dart';
 
-class NewTaskGroup extends StatelessWidget {
-  const NewTaskGroup({super.key});
+class NewTaskScreen extends StatelessWidget {
+  final int groupId;
+
+  const NewTaskScreen({super.key, required this.groupId});
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +13,8 @@ class NewTaskGroup extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.list_rounded),
-        title: const Text('Enter Details'),
+        leading: const Icon(Icons.task_alt_rounded),
+        title: const Text('Enter Task Details'),
       ),
       body: Center(
         child: Container(
@@ -22,9 +24,8 @@ class NewTaskGroup extends StatelessWidget {
             child: Column(
               children: [
                 FormBuilderTextField(
-                  name: 'Name',
-                  decoration: const InputDecoration(labelText: 'Name'),
-                 
+                  name: 'TaskName',
+                  decoration: const InputDecoration(labelText: 'Task Name'),
                 ),
               ],
             ),
@@ -33,7 +34,7 @@ class NewTaskGroup extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         enableFeedback: true,
-        heroTag: 'newtaskGroup',
+        heroTag: 'newTask',
         label: const Row(
           children: [
             Icon(Icons.save_rounded),
@@ -48,13 +49,16 @@ class NewTaskGroup extends StatelessWidget {
         ),
         onPressed: () async {
           if (formKey.currentState?.saveAndValidate() ?? false) {
-            final groupName = formKey.currentState?.value['Name'];
-            final newTaskGroup = {'name': groupName};
+            final taskName = formKey.currentState?.value['TaskName'];
+            final newTask = {
+              'name': taskName,
+              'group_id': groupId,
+            };
 
-            await DataBaseGroup().insertTaskGroup(newTaskGroup);
+            await DataBaseGroup().insertTask(newTask);
 
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Task group saved!')),
+              const SnackBar(content: Text('Task saved!')),
             );
 
             Navigator.pop(context, true);

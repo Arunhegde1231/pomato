@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pomato/screens/tasklist.dart';
 import 'package:pomato/taskdata.dart';
-import 'newtaskgroup.dart';
+import 'package:pomato/screens/newtaskgroup.dart';
 
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
@@ -10,40 +11,54 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  List<Map<String, dynamic>> _tasks = [];
+  List<Map<String, dynamic>> _taskGroups = [];
 
   @override
   void initState() {
     super.initState();
-    _loadTasks();
+    _loadTaskGroups();
   }
 
-  Future<void> _loadTasks() async {
-    final tasks = await DataBaseGroup().getTasks();
+  Future<void> _loadTaskGroups() async {
+    final taskGroups = await DataBaseGroup().getTaskGroups();
     setState(() {
-      _tasks = tasks;
+      _taskGroups = taskGroups;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Task Groups'),
+      ),
       body: ListView.builder(
-        itemCount: _tasks.length,
+        itemCount: _taskGroups.length,
         itemBuilder: (context, index) {
-          final task = _tasks[index];
+          final taskGroup = _taskGroups[index];
           return ListTile(
-            title: Text(task['name']),
+            title: Text(taskGroup['name']),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      TaskListScreen(groupId: taskGroup['id']),
+                ),
+              );
+            },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const NewTaskGroup()),
           );
-          _loadTasks(); 
+          if (result == true) {
+            _loadTaskGroups();
+          }
         },
         backgroundColor: Colors.green[900],
         child: const Icon(Icons.add),
