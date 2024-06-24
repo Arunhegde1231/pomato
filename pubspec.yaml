@@ -17,6 +17,7 @@ dependencies:
   flutter_form_builder: ^9.3.0
   sqflite: ^2.3.3+1
   path: ^1.9.0
+  timer_builder: ^2.0.0
 
 dev_dependencies:
   flutter_test:
