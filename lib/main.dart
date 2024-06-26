@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pomato/screens/taskscreen.dart';
 import 'package:provider/provider.dart';
 import 'notifiers.dart';
 import 'package:pomato/screens/statscreen.dart';
-import 'package:pomato/screens/taskscreen.dart';
 import 'package:pomato/screens/timerscreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'screens/settings.dart';
