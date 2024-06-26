@@ -4,7 +4,7 @@ import 'package:pomato/effects.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../notifiers.dart';
+import 'package:pomato/notifiers.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});

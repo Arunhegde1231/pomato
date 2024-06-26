@@ -11,6 +11,19 @@ class TaskListScreen extends StatefulWidget {
   _TaskListScreenState createState() => _TaskListScreenState();
 }
 
+class Tasks {
+  final int sno;
+  final String title;
+  final bool completed;
+  final int tag;
+
+  const Tasks(
+      {required this.sno,
+      required this.title,
+      required this.completed,
+      required this.tag});
+}
+
 class _TaskListScreenState extends State<TaskListScreen> {
   List<Map<String, dynamic>> _tasks = [];
 
