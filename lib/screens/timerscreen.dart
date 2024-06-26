@@ -37,8 +37,8 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final timerNotifier = Provider.of<TimerNotifier>(context);
-    final breakNotifier = Provider.of<BreakNotifier>(context);
+    final TimerNotifier timerNotifier = Provider.of<TimerNotifier>(context);
+    final BreakNotifier breakNotifier = Provider.of<BreakNotifier>(context);
     timerNotifier.addListener(_updateRemainingTime);
     breakNotifier.addListener(_updateRemainingTime);
   }
@@ -88,6 +88,17 @@ class _TimerScreenState extends State<TimerScreen> {
     });
   }
 
+  void _resetTimer() {
+    _timer?.cancel();
+    setState(() {
+      isRunning = false;
+      isPaused = false;
+      isBreakTime = false;
+      remainingTime =
+          Provider.of<TimerNotifier>(context, listen: false).value * 60;
+    });
+  }
+
   void _switchMode() {
     setState(() {
       if (isBreakTime) {
@@ -106,10 +117,6 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void dispose() {
     _timer?.cancel();
-    Provider.of<TimerNotifier>(context, listen: false)
-        .removeListener(_updateRemainingTime);
-    Provider.of<BreakNotifier>(context, listen: false)
-        .removeListener(_updateRemainingTime);
     super.dispose();
   }
 
@@ -152,6 +159,11 @@ class _TimerScreenState extends State<TimerScreen> {
               ElevatedButton(
                 onPressed: _stopTimer,
                 child: const Text('Stop'),
+              ),
+              const SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: _resetTimer,
+                child: const Text('Reset'),
               ),
             ],
           ),

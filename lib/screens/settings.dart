@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
+import 'package:pomato/effects.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,66 +38,71 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: SleekCircularSlider(
-            min: 5,
-            max: 60,
-            initialValue: key == 'timerValue'
-                ? _timerValue.toDouble()
-                : _breakValue.toDouble(),
-            onChange: (double value) {
-              setState(() {
+        return GlassEffect(
+          blur: 6,
+          opacity: 0.3,
+          color: Colors.grey,
+          child: AlertDialog(
+            title: Text(title),
+            content: SleekCircularSlider(
+              min: 5,
+              max: 60,
+              initialValue: key == 'timerValue'
+                  ? _timerValue.toDouble()
+                  : _breakValue.toDouble(),
+              onChange: (double value) {
+                setState(() {
+                  if (key == 'timerValue') {
+                    _timerValue = value.round();
+                  } else {
+                    _breakValue = value.round();
+                  }
+                });
+              },
+              onChangeEnd: (double value) async {
+                final prefs = await SharedPreferences.getInstance();
                 if (key == 'timerValue') {
-                  _timerValue = value.round();
+                  prefs.setInt('timerValue', value.round());
+                  await prefs.reload();
+                  Provider.of<TimerNotifier>(context, listen: false)
+                      .setValue(value.round());
                 } else {
-                  _breakValue = value.round();
+                  prefs.setInt('breakValue', value.round());
+                  await prefs.reload();
+                  Provider.of<BreakNotifier>(context, listen: false)
+                      .setValue(value.round());
                 }
-              });
-            },
-            onChangeEnd: (double value) async {
-              final prefs = await SharedPreferences.getInstance();
-              if (key == 'timerValue') {
-                prefs.setInt('timerValue', value.round());
-                await prefs.reload();
-                Provider.of<TimerNotifier>(context, listen: false)
-                    .setValue(value.round());
-              } else {
-                prefs.setInt('breakValue', value.round());
-                await prefs.reload();
-                Provider.of<BreakNotifier>(context, listen: false)
-                    .setValue(value.round());
-              }
-              setState(() {});
-            },
-            appearance: CircularSliderAppearance(
-              customWidths: CustomSliderWidths(
-                trackWidth: 4,
-                progressBarWidth: 10,
-                shadowWidth: 20,
+                setState(() {});
+              },
+              appearance: CircularSliderAppearance(
+                customWidths: CustomSliderWidths(
+                  trackWidth: 4,
+                  progressBarWidth: 10,
+                  shadowWidth: 20,
+                ),
+                infoProperties: InfoProperties(
+                  modifier: (double value) {
+                    final roundedValue = value.round().toString();
+                    return '$roundedValue min';
+                  },
+                ),
+                customColors: CustomSliderColors(
+                  trackColor: Colors.grey,
+                  progressBarColors: [Colors.blue, Colors.lightBlueAccent],
+                  shadowColor: Colors.blueAccent,
+                  shadowMaxOpacity: 0.2,
+                ),
               ),
-              infoProperties: InfoProperties(
-                modifier: (double value) {
-                  final roundedValue = value.round().toString();
-                  return '$roundedValue min';
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
               ),
-              customColors: CustomSliderColors(
-                trackColor: Colors.grey,
-                progressBarColors: [Colors.blue, Colors.lightBlueAccent],
-                shadowColor: Colors.blueAccent,
-                shadowMaxOpacity: 0.2,
-              ),
-            ),
+            ],
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
@@ -113,7 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
               tiles: [
                 SettingsTile(
                   title: const Text('Minutes'),
-                  description: Text('Set timer in minutes ($_timerValue min)'),
+                  description: const Text('Set timer in minutes'),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
                         context, 'Set Timer Minutes', 'timerValue');
@@ -122,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 SettingsTile(
                   title: const Text('Break'),
                   description:
-                      Text('Set break time in minutes ($_breakValue min)'),
+                      const Text('Set break time in minutes'),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
                         context, 'Set Break Minutes', 'breakValue');
