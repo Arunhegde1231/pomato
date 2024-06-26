@@ -37,8 +37,8 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final TimerNotifier timerNotifier = Provider.of<TimerNotifier>(context);
-    final BreakNotifier breakNotifier = Provider.of<BreakNotifier>(context);
+    final timerNotifier = Provider.of<TimerNotifier>(context);
+    final breakNotifier = Provider.of<BreakNotifier>(context);
     timerNotifier.addListener(_updateRemainingTime);
     breakNotifier.addListener(_updateRemainingTime);
   }
@@ -106,6 +106,10 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    Provider.of<TimerNotifier>(context, listen: false)
+        .removeListener(_updateRemainingTime);
+    Provider.of<BreakNotifier>(context, listen: false)
+        .removeListener(_updateRemainingTime);
     super.dispose();
   }
 
@@ -128,7 +132,7 @@ class _TimerScreenState extends State<TimerScreen> {
           ),
           const SizedBox(height: 20),
           Text(
-            _formatTime(remainingTime),
+            _timeFormat(remainingTime),
             style: const TextStyle(
               color: Colors.black,
               fontSize: 45,
@@ -156,7 +160,7 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 
-  String _formatTime(int seconds) {
+  String _timeFormat(int seconds) {
     final minutes = seconds ~/ 60;
     final remainingSeconds = seconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';

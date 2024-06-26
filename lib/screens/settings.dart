@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
-import 'package:pomato/effects.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pomato/notifiers.dart';
-
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+import '../notifiers.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -20,7 +17,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   int _timerValue = 25; // default
   int _breakValue = 5; // default
-  bool _settingsChanged = false;
 
   @override
   void initState() {
@@ -40,92 +36,75 @@ class _SettingsPageState extends State<SettingsPage> {
   void _showSliderDialog(BuildContext context, String title, String key) {
     showDialog(
       context: context,
-      builder: (context) {
-        return GlassEffect(
-          blur: 3,
-          opacity: 0.3,
-          color: Colors.grey[600]!,
-          child: AlertDialog(
-            title: Text(title),
-            content: SleekCircularSlider(
-              min: 5,
-              max: 60,
-              initialValue: key == 'timerValue'
-                  ? _timerValue.toDouble()
-                  : _breakValue.toDouble(),
-              onChange: (double value) {
-                setState(() {
-                  if (key == 'timerValue') {
-                    _timerValue = value.round();
-                  } else {
-                    _breakValue = value.round();
-                  }
-                });
-              },
-              onChangeEnd: (double value) async {
-                final prefs = await SharedPreferences.getInstance();
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SleekCircularSlider(
+            min: 5,
+            max: 60,
+            initialValue: key == 'timerValue'
+                ? _timerValue.toDouble()
+                : _breakValue.toDouble(),
+            onChange: (double value) {
+              setState(() {
                 if (key == 'timerValue') {
-                  prefs.setInt('timerValue', value.round());
-                  await prefs.reload();
-                  Provider.of<TimerNotifier>(context.mounted as BuildContext, listen: false)
-                      .updateTimer(value.round());
+                  _timerValue = value.round();
                 } else {
-                  prefs.setInt('breakValue', value.round());
-                  await prefs.reload();
-                  Provider.of<BreakNotifier>(context.mounted as BuildContext, listen: false)
-                      .updateBreak(value.round());
+                  _breakValue = value.round();
                 }
-                setState(() {
-                  _settingsChanged = true;
-                });
-              },
-              appearance: CircularSliderAppearance(
-                customWidths: CustomSliderWidths(
-                  trackWidth: 4,
-                  progressBarWidth: 10,
-                  shadowWidth: 20,
-                ),
-                infoProperties: InfoProperties(
-                  modifier: (double value) {
-                    final roundedValue = value.round().toString();
-                    return '$roundedValue min';
-                  },
-                ),
-                customColors: CustomSliderColors(
-                  trackColor: Colors.grey,
-                  progressBarColors: [Colors.blue, Colors.lightBlueAccent],
-                  shadowColor: Colors.blueAccent,
-                  shadowMaxOpacity: 0.2,
-                ),
+              });
+            },
+            onChangeEnd: (double value) async {
+              final prefs = await SharedPreferences.getInstance();
+              if (key == 'timerValue') {
+                prefs.setInt('timerValue', value.round());
+                await prefs.reload();
+                Provider.of<TimerNotifier>(context, listen: false)
+                    .setValue(value.round());
+              } else {
+                prefs.setInt('breakValue', value.round());
+                await prefs.reload();
+                Provider.of<BreakNotifier>(context, listen: false)
+                    .setValue(value.round());
+              }
+              setState(() {});
+            },
+            appearance: CircularSliderAppearance(
+              customWidths: CustomSliderWidths(
+                trackWidth: 4,
+                progressBarWidth: 10,
+                shadowWidth: 20,
               ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    _settingsChanged = true;
-                  });
+              infoProperties: InfoProperties(
+                modifier: (double value) {
+                  final roundedValue = value.round().toString();
+                  return '$roundedValue min';
                 },
               ),
-            ],
+              customColors: CustomSliderColors(
+                trackColor: Colors.grey,
+                progressBarColors: [Colors.blue, Colors.lightBlueAccent],
+                shadowColor: Colors.blueAccent,
+                shadowMaxOpacity: 0.2,
+              ),
+            ),
           ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
   }
 
   @override
-  void dispose() {
-    Navigator.of(context).pop(_settingsChanged);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: SafeArea(
         child: SettingsList(
           sections: [
@@ -134,7 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
               tiles: [
                 SettingsTile(
                   title: const Text('Minutes'),
-                  description: const Text('Set timer in minutes'),
+                  description: Text('Set timer in minutes ($_timerValue min)'),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
                         context, 'Set Timer Minutes', 'timerValue');
@@ -142,41 +121,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 SettingsTile(
                   title: const Text('Break'),
-                  description: const Text('Set break time in minutes '),
+                  description:
+                      Text('Set break time in minutes ($_breakValue min)'),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
                         context, 'Set Break Minutes', 'breakValue');
                   },
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text('Tasks'),
-              tiles: [
-                SettingsTile(
-                  title: const Text('xoxoxox'),
-                  description: const Text('xoxoxoxox'),
-                  onPressed: (BuildContext context) {},
-                ),
-                SettingsTile(
-                  title: const Text('xoxoxox'),
-                  description: const Text('xoxoxoxox'),
-                  onPressed: (BuildContext context) {},
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text('Statistics'),
-              tiles: [
-                SettingsTile(
-                  title: const Text('xoxoxox'),
-                  description: const Text('xoxoxoxox'),
-                  onPressed: (BuildContext context) {},
-                ),
-                SettingsTile(
-                  title: const Text('xoxoxox'),
-                  description: const Text('xoxoxoxox'),
-                  onPressed: (BuildContext context) {},
                 ),
               ],
             ),

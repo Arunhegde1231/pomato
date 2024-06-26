@@ -1,17 +1,23 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-class TimerNotifier extends ValueNotifier<int> {
-  TimerNotifier(super.value);
+class TimerNotifier extends ChangeNotifier {
+  int _value = 25;
 
-  void updateTimer(int newValue) {
-    value = newValue;
+  int get value => _value;
+
+  void setValue(int newValue) {
+    _value = newValue;
+    notifyListeners();
   }
 }
 
-class BreakNotifier extends ValueNotifier<int> {
-  BreakNotifier(super.value);
+class BreakNotifier extends ChangeNotifier {
+  int _value = 5;
 
-  void updateBreak(int newValue) {
-    value = newValue;
+  int get value => _value;
+
+  void setValue(int newValue) {
+    _value = newValue;
+    notifyListeners();
   }
 }

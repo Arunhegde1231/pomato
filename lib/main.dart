@@ -6,13 +6,14 @@ import 'package:pomato/screens/taskscreen.dart';
 import 'package:pomato/screens/timerscreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'screens/settings.dart';
+import 'notifiers.dart'; 
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => TimerNotifier(25)),
-        ChangeNotifierProvider(create: (_) => BreakNotifier(5)),
+        ChangeNotifierProvider(create: (_) => TimerNotifier()),
+        ChangeNotifierProvider(create: (_) => BreakNotifier()),
       ],
       child: const MyApp(),
     ),
@@ -131,3 +132,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+/*
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'notifiers.dart'; // Import your notifiers
+
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TimerNotifier()),
+        ChangeNotifierProvider(create: (_) => BreakNotifier()),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+ */
