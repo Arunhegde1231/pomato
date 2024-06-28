@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomato/taskdata.dart';
+import 'package:pomato/screens/tasks/taskdata.dart';
 import 'package:pomato/screens/tasks/newtaskscreen.dart';
 
 class TaskListScreen extends StatefulWidget {

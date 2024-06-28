@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:pomato/taskdata.dart';
+import 'package:pomato/screens/tasks/taskdata.dart';
 
 class NewTaskScreen extends StatelessWidget {
   final int groupId;
