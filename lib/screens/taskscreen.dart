@@ -21,9 +21,10 @@ class _TaskScreenState extends State<TaskScreen> {
     return Scaffold(
       body: EasyInfiniteDateTimeLine(
         selectionMode: const SelectionMode.autoCenter(),
-        firstDate: DateTime(DateTime.now().year),
+        firstDate: DateTime(DateTime.now().year, DateTime.now().month, 1),
         focusDate: _focusDate,
-        lastDate: DateTime(DateTime.now().year, 12, 31),
+        lastDate: DateTime(
+            DateTime.now().year, DateTime.now().month + 2, DateTime.now().day),
         onDateChange: (selectedDate) {
           setState(() {
             _focusDate = selectedDate;
