@@ -1,74 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:pomato/screens/tasks/taskdata.dart';
 
-class NewTaskScreen extends StatelessWidget {
-  final int groupId;
+class NewTaskForm extends StatefulWidget {
+  const NewTaskForm({super.key});
 
-  const NewTaskScreen({super.key, required this.groupId});
+  @override
+  _NewTaskFormState createState() => _NewTaskFormState();
+}
+
+class _NewTaskFormState extends State<NewTaskForm> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormBuilderState>();
-
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.task_alt_rounded),
-        title: const Text('Enter Task Details'),
+        title: const Text('Add Task'),
       ),
-      body: Center(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: FormBuilder(
-            key: formKey,
-            child: Column(
-              children: [
-                FormBuilderTextField(
-                  name: 'TaskName',
-                  decoration: const InputDecoration(labelText: 'Task Name'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
                 ),
-              ],
-            ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a name';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _descriptionController,
+                decoration: const InputDecoration(
+                  labelText: 'Description',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a description';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // Handle form submission
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Submit'),
+              ),
+            ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        enableFeedback: true,
-        heroTag: 'newTask',
-        label: const Row(
-          children: [
-            Icon(Icons.save_rounded),
-            SizedBox(
-              width: 15,
-            ),
-            Text(
-              'Save',
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-        onPressed: () async {
-          if (formKey.currentState?.saveAndValidate() ?? false) {
-            final taskName = formKey.currentState?.value['TaskName'];
-            final newTask = {
-              'name': taskName,
-              'group_id': groupId,
-            };
-
-            await DataBaseGroup().insertTask(newTask);
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Task saved!')),
-            );
-
-            Navigator.pop(context, true);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Validation failed')),
-            );
-          }
-        },
-      ),
     );
-  }
-}
+  }}

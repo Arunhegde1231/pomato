@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:pomato/screens/tasks/newtaskscreen.dart';
 
 DateTime _focusDate =
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -56,22 +57,30 @@ class _TaskScreenState extends State<TaskScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
                   alignment: Alignment.topLeft,
                   child: const Text(
                     'Tasks',
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   )),
-                  //add sorting and filtering and tag features
+              //add sorting and filtering and tag features
             ],
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewTaskForm()),
+          );
+        },
         backgroundColor: const Color.fromARGB(255, 188, 85, 232),
         child: const Icon(Icons.add),
       ),
     );
   }
 }
+
+
+
