@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
-import '../notifiers.dart';
+import '../../notifiers.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});

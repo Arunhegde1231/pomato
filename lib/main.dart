@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pomato/screens/taskscreen.dart';
+import 'package:pomato/screens/tasks/taskscreen.dart';
 import 'package:provider/provider.dart';
 import 'notifiers.dart';
-import 'package:pomato/screens/statscreen.dart';
-import 'package:pomato/screens/timerscreen.dart';
+import 'package:pomato/screens/stats/statscreen.dart';
+import 'package:pomato/screens/timer/timerscreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'screens/settings.dart';
+import 'screens/settings/settings.dart';
 
 void main() {
   runApp(
