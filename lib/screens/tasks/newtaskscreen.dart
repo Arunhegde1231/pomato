@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pomato/screens/tasks/database.dart';
 
 class NewTaskForm extends StatefulWidget {
   const NewTaskForm({super.key});
@@ -50,9 +51,13 @@ class _NewTaskFormState extends State<NewTaskForm> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    // Handle form submission
+                    Map<String, dynamic> task = {
+                      'name': _nameController.text,
+                      'description': _descriptionController.text,
+                    };
+                    await DatabaseHelper().insertTask(task);
                     Navigator.pop(context);
                   }
                 },
@@ -63,4 +68,5 @@ class _NewTaskFormState extends State<NewTaskForm> {
         ),
       ),
     );
-  }}
+  }
+}
