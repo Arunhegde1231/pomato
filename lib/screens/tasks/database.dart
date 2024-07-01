@@ -28,9 +28,9 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> insertTask(Map<String, dynamic> task) async {
+  Future<int> insertTask(Map<String, dynamic> task) async {
     final db = await database;
-    await db.insert(
+    return await db.insert(
       'tasks',
       task,
       conflictAlgorithm: ConflictAlgorithm.replace,
