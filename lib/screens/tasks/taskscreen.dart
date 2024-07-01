@@ -76,7 +76,7 @@ class _TaskScreenState extends State<TaskScreen> {
           );
         },
         backgroundColor: const Color.fromARGB(255, 188, 85, 232),
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add_task_rounded),
       ),
     );
   }
