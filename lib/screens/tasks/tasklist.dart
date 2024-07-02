@@ -2,20 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:pomato/screens/tasks/database.dart';
 
 class TaskListWidget extends StatefulWidget {
-  const TaskListWidget({super.key});
+  const TaskListWidget({Key? key}) : super(key: key);
 
   @override
-  _TaskListWidgetState createState() => _TaskListWidgetState();
+  TaskListWidgetState createState() => TaskListWidgetState();
 }
 
-class _TaskListWidgetState extends State<TaskListWidget> {
+class TaskListWidgetState extends State<TaskListWidget> {
   late Future<List<Map<String, dynamic>>> _tasks;
 
   @override
   void initState() {
     super.initState();
-    _tasks =
-        DatabaseHelper().getTasks(); 
+    fetchTasks();
+  }
+
+  void fetchTasks() {
+    setState(() {
+      _tasks = DatabaseHelper().getTasks();
+    });
   }
 
   @override

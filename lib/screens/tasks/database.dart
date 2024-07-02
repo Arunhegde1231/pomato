@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'dart:async';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -45,6 +44,4 @@ class DatabaseHelper {
     final db = await database;
     return await db.insert('tasks', task);
   }
-
-  // Add other CRUD operations
 }

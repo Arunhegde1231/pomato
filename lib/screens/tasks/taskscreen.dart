@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:pomato/screens/tasks/newtaskscreen.dart';
 import 'package:pomato/screens/tasks/tasklist.dart';
-import 'newtaskscreen.dart';
 
 DateTime _focusDate =
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -13,9 +13,16 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
+  final GlobalKey<TaskListWidgetState> _taskListKey =
+      GlobalKey<TaskListWidgetState>();
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void _refreshTaskList() {
+    _taskListKey.currentState?.fetchTasks();
   }
 
   @override
@@ -69,19 +76,18 @@ class _TaskScreenState extends State<TaskScreen> {
             ],
           ),
           const SizedBox(height: 10),
-          const Expanded(
-            child: TaskListWidget(), 
+          Expanded(
+            child: TaskListWidget(key: _taskListKey),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const NewTaskForm()),
-          ).then((_) {
-            setState(() {});
-          });
+          );
+          _refreshTaskList();
         },
         backgroundColor: const Color.fromARGB(255, 188, 85, 232),
         child: const Icon(Icons.add_task_rounded),
