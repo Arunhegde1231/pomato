@@ -1,10 +1,10 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'dart:async';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
-
   static Database? _database;
 
   DatabaseHelper._internal();
@@ -16,24 +16,35 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'tasks.db');
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'tasks.db');
+
     return await openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) {
-        return db.execute(
-          "CREATE TABLE tasks(id INTEGER PRIMARY KEY, name TEXT, description TEXT)",
-        );
-      },
+      onCreate: _onCreate,
     );
+  }
+
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE tasks(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        description TEXT
+      )
+    ''');
+  }
+
+  Future<List<Map<String, dynamic>>> getTasks() async {
+    final db = await database;
+    return await db.query('tasks');
   }
 
   Future<int> insertTask(Map<String, dynamic> task) async {
     final db = await database;
-    return await db.insert(
-      'tasks',
-      task,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    return await db.insert('tasks', task);
   }
+
+  // Add other CRUD operations
 }

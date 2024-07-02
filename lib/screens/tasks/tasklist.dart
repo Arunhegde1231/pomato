@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'database.dart';
+import 'package:pomato/screens/tasks/database.dart';
 
 class TaskListWidget extends StatefulWidget {
   const TaskListWidget({super.key});
@@ -8,20 +8,14 @@ class TaskListWidget extends StatefulWidget {
   _TaskListWidgetState createState() => _TaskListWidgetState();
 }
 
-class TaskService {
-  Future<List<Map<String, dynamic>>> getTasks() async {
-    final db = await DatabaseHelper().database;
-    return await db.query('tasks');
-  }
-}
-
 class _TaskListWidgetState extends State<TaskListWidget> {
   late Future<List<Map<String, dynamic>>> _tasks;
 
   @override
   void initState() {
     super.initState();
-    _tasks = TaskService().getTasks();
+    _tasks =
+        DatabaseHelper().getTasks(); 
   }
 
   @override
@@ -37,6 +31,7 @@ class _TaskListWidgetState extends State<TaskListWidget> {
           return const Center(child: Text('No tasks available.'));
         } else {
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final task = snapshot.data![index];

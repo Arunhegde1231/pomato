@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:pomato/screens/tasks/newtaskscreen.dart';
+import 'package:pomato/screens/tasks/tasklist.dart';
+import 'newtaskscreen.dart';
 
 DateTime _focusDate =
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -57,14 +58,19 @@ class _TaskScreenState extends State<TaskScreen> {
           Row(
             children: [
               Container(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
-                  alignment: Alignment.topLeft,
-                  child: const Text(
-                    'Tasks',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  )),
+                padding: const EdgeInsets.fromLTRB(15, 0, 0, 10),
+                alignment: Alignment.topLeft,
+                child: const Text(
+                  'Tasks',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
               //add sorting and filtering and tag features
             ],
+          ),
+          const SizedBox(height: 10),
+          const Expanded(
+            child: TaskListWidget(), 
           ),
         ],
       ),
@@ -73,7 +79,9 @@ class _TaskScreenState extends State<TaskScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const NewTaskForm()),
-          );
+          ).then((_) {
+            setState(() {});
+          });
         },
         backgroundColor: const Color.fromARGB(255, 188, 85, 232),
         child: const Icon(Icons.add_task_rounded),
@@ -81,6 +89,3 @@ class _TaskScreenState extends State<TaskScreen> {
     );
   }
 }
-
-
-
