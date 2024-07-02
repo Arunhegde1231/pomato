@@ -5,12 +5,13 @@
 ## Features
 
 - Pomodoro Timer
-  - Set time intervals to whatever you want
-  - Set number of repeats
+  - Set focus and break intervals to whatever you want
+  - Set number of cycles
   - Pause, Stop and Restarts
 - Tasks
   - Maintain a list of tasks to check off once completed.
-  - Make new task lists and group them.
+  - Make new task lists and group them by date.
+  - organize tasks by adding tasks.
 - Statistics
   - View all your sessions and the number of times and tasks completed.
   - Get weekly and monthly summaries of sessions and completed tasks.
