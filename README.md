@@ -9,9 +9,11 @@
   - [x] Set number of cycles
   - [x] Pause, Stop and Restarts
 - Tasks
-  - [ ] Maintain a list of tasks to check off once completed.
-  - [ ] Make new task lists and group them by date.
-  - [ ] organize tasks by adding tasks.
+  - [x] Maintain a list of tasks to check off once completed.
+  - [x] Make new task lists and group them by date.
+  - [x] organize tasks by adding tasks.
+  - [ ] Edit tasks.
+  - [ ] Delete tasks.
 - Statistics
   - [ ] View all your sessions and the number of times and tasks completed.
   - [ ]  Get weekly and monthly summaries of sessions and completed tasks.
