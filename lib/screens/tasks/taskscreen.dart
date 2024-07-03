@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:intl/intl.dart';
 import 'package:pomato/screens/tasks/newtaskscreen.dart';
 import 'package:pomato/screens/tasks/tasklist.dart';
 
@@ -27,6 +28,7 @@ class _TaskScreenState extends State<TaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat('dd-MM-yyyy').format(_focusDate);
     return Scaffold(
       body: Column(
         children: [
@@ -72,7 +74,16 @@ class _TaskScreenState extends State<TaskScreen> {
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
               ),
-              //add sorting and filtering and tag features
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                alignment: Alignment.topRight,
+                child: Text(
+                  formattedDate,
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
