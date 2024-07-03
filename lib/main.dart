@@ -13,7 +13,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => TimerNotifier()),
         ChangeNotifierProvider(create: (_) => BreakNotifier()),
-        ChangeNotifierProvider(create: (_)=> CycleNotifier()),
+        ChangeNotifierProvider(create: (_) => CycleNotifier()),
       ],
       child: const MyApp(),
     ),
