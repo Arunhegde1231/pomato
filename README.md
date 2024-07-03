@@ -1,19 +1,20 @@
-# Pomato
+ # Pomato
 
 <p>Pomato is the ultimate tool to help you manage your tasks and maximize your productivity. Designed with the Pomodoro Technique at its core, Pomato allows you to break your work into focused intervals, ensuring you stay on track and avoid burnout.</p>
 
 ## Features
 
 - Pomodoro Timer
-  - Set time intervals to whatever you want
-  - Set number of repeats
-  - Pause, Stop and Restarts
+  - [x] Set focus and break intervals to whatever you want
+  - [x] Set number of cycles
+  - [x] Pause, Stop and Restarts
 - Tasks
-  - Maintain a list of tasks to check off once completed.
-  - Make new task lists and group them.
+  - [ ] Maintain a list of tasks to check off once completed.
+  - [ ] Make new task lists and group them by date.
+  - [ ] organize tasks by adding tasks.
 - Statistics
-  - View all your sessions and the number of times and tasks completed.
-  - Get weekly and monthly summaries of sessions and completed tasks.
+  - [ ] View all your sessions and the number of times and tasks completed.
+  - [ ]  Get weekly and monthly summaries of sessions and completed tasks.
 
 ## Building
 

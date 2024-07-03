@@ -25,7 +25,7 @@ class DatabaseHelper {
           'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, name TEXT, description TEXT)',
         );
       },
-      version: 2, 
+      version: 2,
     );
   }
 
