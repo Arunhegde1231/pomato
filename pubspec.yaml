@@ -1,7 +1,7 @@
 name: pomato
 description: "A free and open source Pomodoro timer app for Android, made using Flutter."
 publish_to: 'none'
-version: 0.1.7
+version: 0.2.0
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
