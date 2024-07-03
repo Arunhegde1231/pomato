@@ -4,9 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:pomato/screens/tasks/newtaskscreen.dart';
 import 'package:pomato/screens/tasks/tasklist.dart';
 
-DateTime _focusDate =
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
   @override
@@ -16,6 +13,9 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
   final GlobalKey<TaskListWidgetState> _taskListKey =
       GlobalKey<TaskListWidgetState>();
+
+  DateTime _focusDate =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   void initState() {
