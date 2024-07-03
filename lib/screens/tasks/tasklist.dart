@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pomato/screens/tasks/database.dart';
 
 class TaskListWidget extends StatefulWidget {
-  const TaskListWidget({Key? key}) : super(key: key);
+  final DateTime selectedDate;
+  const TaskListWidget({super.key, required this.selectedDate});
 
   @override
   TaskListWidgetState createState() => TaskListWidgetState();
@@ -14,12 +16,13 @@ class TaskListWidgetState extends State<TaskListWidget> {
   @override
   void initState() {
     super.initState();
-    fetchTasks();
+    fetchTasks(widget.selectedDate);
   }
 
-  void fetchTasks() {
+  void fetchTasks(DateTime focusDate) {
+    String formattedDate = DateFormat('dd-MM-yyyy').format(focusDate);
     setState(() {
-      _tasks = DatabaseHelper().getTasks();
+      _tasks = DatabaseHelper().getTasksByDate(formattedDate);
     });
   }
 

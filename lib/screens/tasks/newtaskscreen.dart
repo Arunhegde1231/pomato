@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:pomato/screens/tasks/database.dart';
 
 class NewTaskForm extends StatefulWidget {
-  const NewTaskForm({super.key});
+  final DateTime selectedDate;
+  const NewTaskForm({super.key, required this.selectedDate});
 
   @override
   _NewTaskFormState createState() => _NewTaskFormState();
@@ -55,6 +57,8 @@ class _NewTaskFormState extends State<NewTaskForm> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     Map<String, dynamic> task = {
+                      'date':
+                          DateFormat('dd-MM-yyyy').format(widget.selectedDate),
                       'name': _nameController.text,
                       'description': _descriptionController.text,
                     };

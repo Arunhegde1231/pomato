@@ -17,13 +17,8 @@ class _TaskScreenState extends State<TaskScreen> {
   DateTime _focusDate =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _refreshTaskList() {
-    _taskListKey.currentState?.fetchTasks();
+    _taskListKey.currentState?.fetchTasks(_focusDate);
   }
 
   @override
@@ -42,6 +37,7 @@ class _TaskScreenState extends State<TaskScreen> {
             onDateChange: (selectedDate) {
               setState(() {
                 _focusDate = selectedDate;
+                _refreshTaskList();
               });
             },
             dayProps: const EasyDayProps(
@@ -61,9 +57,7 @@ class _TaskScreenState extends State<TaskScreen> {
               ),
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           Row(
             children: [
               Container(
@@ -88,7 +82,10 @@ class _TaskScreenState extends State<TaskScreen> {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: TaskListWidget(key: _taskListKey),
+            child: TaskListWidget(
+              key: _taskListKey,
+              selectedDate: _focusDate,
+            ),
           ),
         ],
       ),
@@ -96,7 +93,8 @@ class _TaskScreenState extends State<TaskScreen> {
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const NewTaskForm()),
+            MaterialPageRoute(
+                builder: (context) => NewTaskForm(selectedDate: _focusDate)),
           );
           _refreshTaskList();
         },
