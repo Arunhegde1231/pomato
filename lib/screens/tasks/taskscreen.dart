@@ -7,7 +7,7 @@ import 'package:pomato/screens/tasks/tasklist.dart';
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
   @override
-  _TaskScreenState createState() => _TaskScreenState();
+  State<TaskScreen> createState() => _TaskScreenState();
 }
 
 class _TaskScreenState extends State<TaskScreen> {
