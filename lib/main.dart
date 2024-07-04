@@ -7,13 +7,21 @@ import 'package:pomato/screens/timer/timerscreen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'screens/settings/settings.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final timerNotifier = TimerNotifier();
+  final breakNotifier = BreakNotifier();
+  final cycleNotifier = CycleNotifier();
+  await timerNotifier.loadValue();
+  await breakNotifier.loadValue();
+  await cycleNotifier.loadValue();
+
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => TimerNotifier()),
-        ChangeNotifierProvider(create: (_) => BreakNotifier()),
-        ChangeNotifierProvider(create: (_) => CycleNotifier()),
+        ChangeNotifierProvider.value(value: timerNotifier),
+        ChangeNotifierProvider.value(value: breakNotifier),
+        ChangeNotifierProvider.value(value: cycleNotifier),
       ],
       child: const MyApp(),
     ),

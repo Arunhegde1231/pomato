@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:pomato/notifiers.dart';
 
@@ -21,19 +20,44 @@ class _TimerScreenState extends State<TimerScreen> {
   bool isBreakTime = false;
   int currentCycle = 1;
   int totalCycles = 1;
+  late TimerNotifier _timerNotifier;
+  late BreakNotifier _breakNotifier;
+  late CycleNotifier _cycleNotifier;
 
   @override
   void initState() {
     super.initState();
+    _timerNotifier = Provider.of<TimerNotifier>(context, listen: false);
+    _breakNotifier = Provider.of<BreakNotifier>(context, listen: false);
+    _cycleNotifier = Provider.of<CycleNotifier>(context, listen: false);
     _loadTimerData();
   }
 
+  void _updateTimerValue() {
+    if (!isBreakTime && !isRunning) {
+      setState(() {
+        remainingTime =
+            Provider.of<TimerNotifier>(context, listen: false).value * 60;
+      });
+    }
+  }
+
+  void _updateBreakValue() {
+    if (isBreakTime && !isRunning) {
+      setState(() {
+        remainingTime =
+            Provider.of<BreakNotifier>(context, listen: false).value * 60;
+      });
+    }
+  }
+
   Future<void> _loadTimerData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
+    await _timerNotifier.loadValue();
+    await _breakNotifier.loadValue();
+    await _cycleNotifier.loadValue();
     setState(() {
-      remainingTime = (prefs.getInt('timerValue') ?? 25) * 60;
-      totalCycles = prefs.getInt('cycleValue') ?? 1;
+      remainingTime = _timerNotifier.value * 60;
+      totalCycles = _cycleNotifier.value;
     });
   }
 
@@ -58,7 +82,7 @@ class _TimerScreenState extends State<TimerScreen> {
 
   void _updateCycles() {
     setState(() {
-      totalCycles = Provider.of<CycleNotifier>(context, listen: false).value;
+      totalCycles = _cycleNotifier.value;
     });
   }
 
@@ -106,8 +130,7 @@ class _TimerScreenState extends State<TimerScreen> {
       isRunning = false;
       isPaused = false;
       isBreakTime = false;
-      remainingTime =
-          Provider.of<TimerNotifier>(context, listen: false).value * 60;
+      remainingTime = _timerNotifier.value * 60;
       currentCycle = 1;
     });
   }
@@ -118,14 +141,12 @@ class _TimerScreenState extends State<TimerScreen> {
         if (currentCycle >= totalCycles) {
           _stopTimer();
         } else {
-          remainingTime =
-              Provider.of<TimerNotifier>(context, listen: false).value * 60;
+          remainingTime = _timerNotifier.value * 60;
           isBreakTime = false;
           currentCycle++;
         }
       } else {
-        remainingTime =
-            Provider.of<BreakNotifier>(context, listen: false).value * 60;
+        remainingTime = _breakNotifier.value * 60;
         isBreakTime = true;
       }
     });
@@ -135,6 +156,11 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    Provider.of<TimerNotifier>(context, listen: false)
+        .removeListener(_updateTimerValue);
+    Provider.of<BreakNotifier>(context, listen: false)
+        .removeListener(_updateBreakValue);
+    _cycleNotifier.removeListener(_updateCycles);
     super.dispose();
   }
 

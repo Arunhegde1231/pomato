@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:pomato/effects.dart';
+import 'package:pomato/notifiers.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pomato/notifiers.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  State<SettingsPage> createState() {
-    return _SettingsPageState();
-  }
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
@@ -26,10 +24,9 @@ class _SettingsPageState extends State<SettingsPage> {
     _loadPreferences();
   }
 
-  void _loadPreferences() async {
+  Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() async {
-      await prefs.reload();
+    setState(() {
       _timerValue = prefs.getInt('timerValue') ?? 25;
       _breakValue = prefs.getInt('breakValue') ?? 5;
       _cycles = prefs.getInt('cycleValue') ?? 1;
@@ -56,11 +53,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
               onChangeEnd: (double value) async {
-                final prefs = await SharedPreferences.getInstance();
-                prefs.setInt('cycleValue', value.round());
-                await prefs.reload();
-                Provider.of<CycleNotifier>(context, listen: false)
-                    .setValue(value.round());
+                final cycleNotifier =
+                    Provider.of<CycleNotifier>(context, listen: false);
+                await cycleNotifier.setValue(value.round());
                 setState(() {});
               },
               appearance: CircularSliderAppearance(
@@ -123,16 +118,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               },
               onChangeEnd: (double value) async {
-                final prefs = await SharedPreferences.getInstance();
                 if (key == 'timerValue') {
-                  prefs.setInt('timerValue', value.round());
-                  await prefs.reload();
-                  Provider.of<TimerNotifier>(context, listen: false)
+                  await Provider.of<TimerNotifier>(context, listen: false)
                       .setValue(value.round());
                 } else {
-                  prefs.setInt('breakValue', value.round());
-                  await prefs.reload();
-                  Provider.of<BreakNotifier>(context, listen: false)
+                  await Provider.of<BreakNotifier>(context, listen: false)
                       .setValue(value.round());
                 }
                 setState(() {});
@@ -182,10 +172,10 @@ class _SettingsPageState extends State<SettingsPage> {
               tiles: [
                 SettingsTile(
                   title: const Text('Minutes'),
-                  description: const Text('Set timer in minutes'),
+                  description: const Text('Set Focus time in minutes'),
                   onPressed: (BuildContext context) {
                     _showSliderDialog(
-                        context, 'Set Timer Minutes', 'timerValue');
+                        context, 'Set Focus time Minutes', 'timerValue');
                   },
                 ),
                 SettingsTile(
@@ -211,9 +201,3 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 }
-/*
-// Inside SettingsPage class, update the _showCycleSlider method
-
-
-
- */
