@@ -83,7 +83,7 @@ class _NewTaskFormState extends State<NewTaskForm> {
                         fontSize: 20,
                       );
                     }
-                    Navigator.pop(context);
+                    Navigator.pop(context.mounted as BuildContext);
                   }
                 },
                 child: const Text('Submit'),
