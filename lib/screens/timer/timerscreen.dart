@@ -206,17 +206,17 @@ class _TimerScreenState extends State<TimerScreen> {
               ElevatedButton(
                 onPressed: isRunning ? _pauseResumeTimer : _startTimer,
                 child:
-                    Text(isRunning ? (isPaused ? 'Resume' : 'Pause') : 'Start'),
+                    Icon(isRunning ? (isPaused ? Icons.play_arrow_rounded : Icons.pause_rounded) : Icons.start_rounded),
               ),
               const SizedBox(width: 20),
               ElevatedButton(
                 onPressed: _stopTimer,
-                child: const Text('Stop'),
+                child: const Icon(Icons.stop_rounded),
               ),
               const SizedBox(width: 20),
               ElevatedButton(
                 onPressed: _resetTimer,
-                child: const Text('Reset'),
+                child: const Icon(Icons.refresh_rounded),
               ),
             ],
           ),
