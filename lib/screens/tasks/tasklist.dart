@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:msh_checkbox/msh_checkbox.dart';
 import 'package:pomato/screens/tasks/database.dart';
 
 class TaskListWidget extends StatefulWidget {
@@ -12,17 +13,32 @@ class TaskListWidget extends StatefulWidget {
 
 class TaskListWidgetState extends State<TaskListWidget> {
   late Future<List<Map<String, dynamic>>> _tasks;
+  final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
   void initState() {
     super.initState();
-    fetchTasks(widget.selectedDate);
+    _tasks = fetchTasks(widget.selectedDate);
   }
 
-  void fetchTasks(DateTime focusDate) {
+  @override
+  void didUpdateWidget(TaskListWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedDate != oldWidget.selectedDate) {
+      _tasks = fetchTasks(widget.selectedDate);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchTasks(DateTime focusDate) {
     String formattedDate = DateFormat('dd-MM-yyyy').format(focusDate);
+    return _databaseHelper.getTasksByDate(formattedDate);
+  }
+
+  Future<void> _completeTask(int taskId) async {
+    String completionDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    await _databaseHelper.moveTaskToCompleted(taskId, completionDate);
     setState(() {
-      _tasks = DatabaseHelper().getTasksByDate(formattedDate);
+      _tasks = fetchTasks(widget.selectedDate);
     });
   }
 
@@ -43,9 +59,25 @@ class TaskListWidgetState extends State<TaskListWidget> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final task = snapshot.data![index];
-              return ListTile(
-                title: Text(task['name']),
-                subtitle: Text(task['description']),
+              return Row(
+                children: [
+                  MSHCheckbox(
+                    size: 20,
+                    value: true,
+                    style: MSHCheckboxStyle.stroke,
+                    onChanged: (selected) {
+                      if (selected) {
+                        _completeTask(task['id']);
+                      }
+                    },
+                  ),
+                  Expanded(
+                    child: ListTile(
+                      title: Text(task['name']),
+                      subtitle: Text(task['description']),
+                    ),
+                  ),
+                ],
               );
             },
           );
