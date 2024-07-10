@@ -35,6 +35,14 @@ class _NewTaskFormState extends State<NewTaskForm> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
+                    Fluttertoast.showToast(
+                        msg: "Please enter a Task Name",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor:
+                            const Color.fromARGB(255, 145, 247, 197),
+                        textColor: Colors.black,
+                        fontSize: 20);
                     return 'Please enter a name';
                   }
                   return null;
@@ -45,12 +53,6 @@ class _NewTaskFormState extends State<NewTaskForm> {
                 decoration: const InputDecoration(
                   labelText: 'Description',
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
-                  }
-                  return null;
-                },
               ),
               const SizedBox(height: 20),
               ElevatedButton(
