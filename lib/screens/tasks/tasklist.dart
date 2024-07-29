@@ -48,7 +48,7 @@ class TaskListWidgetState extends State<TaskListWidget> {
       future: _tasks,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());  
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -63,10 +63,17 @@ class TaskListWidgetState extends State<TaskListWidget> {
                 children: [
                   Expanded(
                     child: ListTile(
-                      title: Text(task['name'],style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                      subtitle: Text(task['description'], style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),),
+                      title: Text(task['name'],
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 22)),
+                      subtitle: Text(
+                        task['description'],
+                        style: const TextStyle(
+                            fontWeight: FontWeight.normal, fontSize: 14),
+                      ),
                     ),
-                  ),const Spacer(),
+                  ),
+                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MSHCheckbox(
