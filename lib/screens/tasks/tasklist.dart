@@ -61,20 +61,23 @@ class TaskListWidgetState extends State<TaskListWidget> {
               final task = snapshot.data![index];
               return Row(
                 children: [
-                  MSHCheckbox(
-                    size: 20,
-                    value: true,
-                    style: MSHCheckboxStyle.stroke,
-                    onChanged: (selected) {
-                      if (selected) {
-                        _completeTask(task['id']);
-                      }
-                    },
-                  ),
                   Expanded(
                     child: ListTile(
-                      title: Text(task['name']),
-                      subtitle: Text(task['description']),
+                      title: Text(task['name'],style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                      subtitle: Text(task['description'], style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 14),),
+                    ),
+                  ),const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MSHCheckbox(
+                      size: 20,
+                      value: true,
+                      style: MSHCheckboxStyle.stroke,
+                      onChanged: (selected) {
+                        if (selected) {
+                          _completeTask(task['id']);
+                        }
+                      },
                     ),
                   ),
                 ],
